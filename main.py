@@ -98,7 +98,7 @@ class WhatsAppBot:
             self.click_button("//*[contains(text(), 'use WhatsApp Web')]", By.XPATH)
 
             # Click attach then poll
-            self.click_button("button[title='Attach']", By.CSS_SELECTOR)
+            self.click_button("button[title='Attach']", By.CSS_SELECTOR, 20)
             self.click_button("//span[contains(text(), 'Poll')]", By.XPATH)
 
             # Get poll textboxes
@@ -133,7 +133,7 @@ class WhatsAppBot:
         self.browser.quit()
         logger.info('Browser closed')
 
-def main():
+def execute():
     logger.info('Starting job')
     # Configuration
     PROFILE_PATH = "YOUR_PATH"
@@ -141,13 +141,27 @@ def main():
     
     # Poll details
     timezone = pytz.timezone('Africa/Cairo')  
-    QUESTION = f"Gym {datetime.datetime.now(timezone).strftime('%d/%m')}" 
+    QUESTION = f"[Auto] Gym {datetime.datetime.now(timezone).strftime('%d/%m')}" 
     OPTIONS = ["Yes", "No"]
 
     # Initialize and run bot
     bot = WhatsAppBot(PROFILE_PATH)
     bot.create_poll(GROUP_LINK, QUESTION, OPTIONS)
     logger.info('Job done')
+
+def main():
+    executions =0
+    while executions<3:
+        executions += 1
+        logger.info(f"Starting execution number {executions}")
+        try:
+            execute()
+            logger.info(f"Execution {executions} completed successfully")
+            break
+        except Exception as e:
+            logger.error(f"Error in execution {executions}: {e}")
+    
+    
 
 if __name__ == "__main__":
     main()
