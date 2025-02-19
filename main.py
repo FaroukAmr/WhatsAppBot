@@ -125,6 +125,7 @@ class WhatsAppBot:
             
         except Exception as e:
             logger.error(f"Error creating poll: {e}")
+            raise e
         finally:
             self.quit()
 
